@@ -22,7 +22,11 @@ export default function SignUp() {
         e.preventDefault();
 
         try {
-            const response = await axios.post(process.env.BACKEND_URL + "/registrar", signupData)
+            const response = await axios.post(process.env.BACKEND_URL + "/registrar", signupData,
+                {
+                    headers: { "Content-Type": "application/json" },
+                }
+            )
             console.log("Respuesta del servidor:", response); // Verifica la respuesta del servidor
             console.log("Usuario registrado:", response.data);
         }
