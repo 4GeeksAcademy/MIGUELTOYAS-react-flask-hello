@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function SignUp() {
-    const [signupData, setSignUpData] = useState({
+export default function Login() {
+    const [loginData, setLoginData] = useState({
         email: "",
         password: ""
     });
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        setSignUpData({
-            ...signupData,
+        setLoginData({
+            ...loginData,
             [e.target.name]: e.target.value,
         });
     };
@@ -19,19 +19,20 @@ export default function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(process.env.BACKEND_URL + "/api/registrar", signupData, {
+            const response = await axios.post(process.env.BACKEND_URL + "/api/login", loginData, {
                 headers: { "Content-Type": "application/json" },
             });
-            console.log("Usuario registrado:", response.data);
-            navigate("/login");
+            console.log("Usuario autenticado:", response.data);
+            sessionStorage.setItem("token", response.data.token);
+            navigate("/private");
         } catch (error) {
-            console.log("Ha habido un error: " + error);
+            console.log("Error de autenticación: " + error.response.data.error);
         }
     };
 
     return (
         <div className="container mt-5">
-            <h2>Registro</h2>
+            <h2>Iniciar Sesión</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email</label>
@@ -40,7 +41,7 @@ export default function SignUp() {
                         className="form-control"
                         id="email"
                         name="email"
-                        value={signupData.email}
+                        value={loginData.email}
                         onChange={handleChange}
                         required
                     />
@@ -52,12 +53,12 @@ export default function SignUp() {
                         className="form-control"
                         id="password"
                         name="password"
-                        value={signupData.password}
+                        value={loginData.password}
                         onChange={handleChange}
                         required
                     />
                 </div>
-                <button type="submit" className="btn btn-primary">Registrarse</button>
+                <button type="submit" className="btn btn-primary">Iniciar Sesión</button>
             </form>
         </div>
     );
