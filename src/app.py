@@ -13,10 +13,11 @@ static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
-app.config['JWT_SECRET_KEY'] = 'tu_clave_secreta'  # Cambia esto por una clave secreta real
-jwt = JWTManager(app)
-
 CORS(app)
+
+
+app.config['JWT_SECRET_KEY'] = 'cacahuete1234'  # Cambia esto por una clave secreta real
+jwt = JWTManager(app)
 
 # database condiguration
 db_url = os.getenv("DATABASE_URL")

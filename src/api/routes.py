@@ -22,23 +22,29 @@ def handle_hello():
 @api.route('/usuarios', methods=['GET'])
 def get_all_users():
     users = User.query.all()
+    
+    # Serializa cada objeto en la lista de usuarios
+    serialized_users = [user.serialize() for user in users]
 
-    return jsonify(users), 201
+    return jsonify(serialized_users), 200
 
 @api.route('/registrar', methods=['POST'])
-def crear_usuario():
+def create_user():
     data = request.get_json()
     email = data.get('email')
     password = data.get('password')
 
+    # Verifica si el usuario ya existe
     user = User.query.filter_by(email=email).first()
     if user:
-        return jsonify({'error': 'El usuario ya existe'}), 400
+        return jsonify({'error': 'User already exists'}), 400
 
-    user = User(id = User.query.coun() + 1, email = email, password = password, is_active = True)
+    # Crea un nuevo usuario
+    user = User(email=email)
+    user.set_password(password)
     db.session.add(user)
     db.session.commit()
-    return jsonify(user.serialize()), 201   
+    return jsonify(user.serialize()), 201
 
 @api.route('/login', methods=['POST'])
 def login():

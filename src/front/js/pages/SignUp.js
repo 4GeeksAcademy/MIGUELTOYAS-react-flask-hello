@@ -19,7 +19,7 @@ export default function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(process.env.BACKEND_URL + "/api/registrar", signupData, {
+            const response = await axios.post(process.env.BACKEND_URL + "//api/registrar", signupData, {
                 headers: { "Content-Type": "application/json" },
             });
             console.log("Usuario registrado:", response.data);
